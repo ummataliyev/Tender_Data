@@ -12,4 +12,4 @@ class Job(models.Model):
         verbose_name_plural = "Jobs"
 
     def __str__(self):
-        return self.company_name
+        return f"{self.company_name} - tender active: {self.deadline}"

@@ -1,8 +1,7 @@
-import time
 import pandas as pd
+
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
@@ -16,6 +15,8 @@ base_url = 'https://www.adb.org/projects/tenders/sector/information-and-communic
 all_data = []
 
 # Function to extract data from a page
+
+
 def extract_data():
     # Check if the "No projects found..." message is present
     empty_message = driver.find_elements(By.CSS_SELECTOR, 'div.view-empty h4')
@@ -46,6 +47,8 @@ def extract_data():
     return True
 
 # Start from page 0
+
+
 page = 0
 
 try:

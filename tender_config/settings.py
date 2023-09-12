@@ -30,7 +30,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # internal
-    'data_app'
+    'data_app',
+
+    # external
+    'django_celery_results',
+    'django_celery_beat',
 ]
 
 MIDDLEWARE = [
@@ -121,3 +125,18 @@ STATICFILES_FINDERS = [
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Celery configuration
+
+CELERY_TIMEZONE = 'Asia/Tashkent'
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60
+CELERY_RESULT_BACKEND = 'django-db'
+CELERY_CACHE_BACKEND = 'django-cache'
+CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
+CELERYBEAT_SCHEDULE = {
+    'test-celery': {
+        'task': 'data_app.tasks.hello_world_task',
+        'schedule': 5.0,
+    }
+}

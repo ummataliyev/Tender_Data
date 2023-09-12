@@ -1,18 +1,23 @@
-from celery import shared_task
-
+import re
+import time
+import locale
+import datetime
 import pandas as pd
 
 from selenium import webdriver
+from dateutil import parser as date_parser
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+
+from celery import shared_task
 
 from data_app.models import Job
 
 
 @shared_task
-def hello_world_task():
-    print("Hello celery ;)")
+def adb_script():
+    print("Task number one")
     # Create a WebDriver instance (you might need to specify the path to your chromedriver executable)
     driver = webdriver.Chrome()
 
@@ -33,7 +38,6 @@ def hello_world_task():
 
         # Find all 'div' elements with class 'item-title'
         item_elements = driver.find_elements(By.CSS_SELECTOR, 'div.item')
-        print(item_elements)
 
         for item_element in item_elements:
             # Extract title and href
@@ -55,13 +59,12 @@ def hello_world_task():
             Job.objects.create(
                 company_name=data['Title'],
                 link=data['Link'],
-                is_active=data['Status']
-                )
+                is_active=data['Status'] == "Active"  # Save True for "Active" and False otherwise
+            )
 
         return True
 
     # Start from page 0
-
 
     page = 0
 
@@ -99,3 +102,75 @@ def hello_world_task():
 
     # Save the DataFrame to an Excel file
     df.to_excel('adb.xlsx', index=False)
+
+
+@shared_task
+def xt_script():
+    print("Task number two")
+    driver = webdriver.Chrome()
+
+    base_url = 'https://xt-xarid.uz/procedure/tender?status=close'
+    driver.get(base_url)
+
+    data_list = []
+    time.sleep(3)
+
+    ui_list_content = driver.find_element(By.CLASS_NAME, 'items')
+    data_view_items = ui_list_content.find_elements(By.CLASS_NAME, 'data-view-item')
+
+    for item in data_view_items:
+        tender_number = item.find_element(By.XPATH, './/div/span[contains(text(), "№")]').text.strip()
+        lot_link = item.find_element(By.XPATH, './/div[@class="title"]/label/a').get_attribute('href')
+        tender_name = item.find_element(By.XPATH, './/div[@class="title"]/label/a').text.strip()
+        deadline = item.find_element(By.XPATH, './/div[contains(label, "Якунланиш муддати:")]/div/time').text.strip()
+
+        pattern = r'\d+\s+[А-Яа-я]+\s+\d+'
+
+        match = re.search(pattern, deadline)
+
+        if match:
+            extracted_date = match.group()
+            russian_month_names = [
+                'Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь',
+                'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'
+            ]
+
+            try:
+                # Parse the extracted date using the dateutil parser
+                extracted_datetime = date_parser.parse(extracted_date, dayfirst=True, monthparser=russian_month_names)
+                # Get the current date and time
+                current_datetime = datetime.datetime.now()
+
+                # Compare the extracted date with the current date
+                status = extracted_datetime > current_datetime
+            except (ValueError, OverflowError):
+                # Handle the case where the date couldn't be parsed
+                extracted_date = deadline
+                status = False
+        else:
+            extracted_date = deadline
+            status = False
+
+
+        # Save the data to the database
+        Job.objects.create(
+            company_name=tender_name['Tender Number'],
+            link=lot_link['Lot Link'],
+            is_acvtive=status['Deadline']
+        )
+
+        tender_info = {
+            "Tender Number": tender_number,
+            "Lot Link": lot_link,
+            "Tender Name": tender_name,
+            "Deadline": extracted_date,
+        }
+
+        data_list.append(tender_info)
+
+    driver.quit()
+
+    df = pd.DataFrame(data_list)
+
+    excel_file = 'harid.xlsx'
+    df.to_excel(excel_file, index=False)

@@ -1,8 +1,10 @@
+import re
+import time
+import pandas as pd
+
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from bs4 import BeautifulSoup
-import pandas as pd
-import time, re
+
 
 driver = webdriver.Chrome()
 
@@ -11,8 +13,8 @@ driver.get(base_url)
 
 data_list = []
 time.sleep(3)
-ui_list_content = driver.find_element(By.CLASS_NAME, 'items')
 
+ui_list_content = driver.find_element(By.CLASS_NAME, 'items')
 data_view_items = ui_list_content.find_elements(By.CLASS_NAME, 'data-view-item')
 
 for item in data_view_items:
@@ -20,7 +22,6 @@ for item in data_view_items:
     lot_link = item.find_element(By.XPATH, './/div[@class="title"]/label/a').get_attribute('href')
     tender_name = item.find_element(By.XPATH, './/div[@class="title"]/label/a').text.strip()
     deadline = item.find_element(By.XPATH, './/div[contains(label, "Якунланиш муддати:")]/div/time').text.strip()
-
 
     pattern = r'\d+\s+[А-Яа-я]+\s+\d+'
 
@@ -30,7 +31,6 @@ for item in data_view_items:
         extracted_date = match.group()
     else:
         extracted_date = deadline
-
 
     tender_info = {
         "Tender Number": tender_number,

@@ -153,3 +153,6 @@ dmypy.json
 cython_debug/
 .vscode/
 __pycache__/
+.~lock.adb.xlsx#
+adb.xlsx
+harid.xlsx

@@ -160,3 +160,12 @@ CELERYBEAT_SCHEDULE = {
         'schedule': 2,  # Schedule the second task to run every 2 minutes
     },
 }
+
+# Telebot service
+SERVICE: dict = {
+    'telebot': {
+        'base_url': env.str('TELEBOT_URL'),
+        'token': env.str('TELEBOT_TOKEN'),
+        'chat_id': env.str('TELEBOT_CHAT_ID')
+    }
+}

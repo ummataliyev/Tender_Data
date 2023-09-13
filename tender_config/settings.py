@@ -90,11 +90,8 @@ if APP_ENV == 'prod':
             'PASSWORD': env.str('POSTGRES_PASSWORD'),
             'HOST': env.str('POSTGRES_HOST'),
             'PORT': env.str('POSTGRES_PORT'),
-            'TEST': {
-                'NAME': 'test_development',
-            },
+            }
         }
-    }
 
 
 # Password validation

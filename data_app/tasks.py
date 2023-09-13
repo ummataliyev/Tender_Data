@@ -1,6 +1,5 @@
 import re
 import time
-import locale
 import datetime
 import pandas as pd
 
@@ -13,6 +12,9 @@ from selenium.webdriver.support import expected_conditions as EC
 from celery import shared_task
 
 from data_app.models import Job
+
+from data_app.libs.telebot import telebot
+from data_app.utils import send_telegram
 
 
 @shared_task
@@ -55,14 +57,18 @@ def adb_script():
             if status_text == "Active":
                 all_data.append({'Title': title_text, 'Link': href, 'Status': status_text})
 
-        for data in all_data:
-            Job.objects.create(
-                company_name=data['Title'],
-                link=data['Link'],
-                is_active=data['Status'] == "Active"  # Save True for "Active" and False otherwise
-            )
+        def save_to_db(all_data):
+            if all_data:
+                for data_item in all_data:
+                    Job.objects.create(
+                        company_name=data_item['Title'],
+                        link=data_item['Link'],
+                        is_active=data_item['Status'] == "Active"
+                    )
 
-        return True
+                send_telegram("New Updates On Tenders")
+                return True
+            return False
 
     # Start from page 0
 

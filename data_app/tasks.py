@@ -13,7 +13,6 @@ from celery import shared_task
 
 from data_app.models import Job
 
-from data_app.libs.telebot import telebot
 from data_app.utils import send_telegram
 
 
@@ -57,18 +56,18 @@ def adb_script():
             if status_text == "Active":
                 all_data.append({'Title': title_text, 'Link': href, 'Status': status_text})
 
-        def save_to_db(all_data):
-            if all_data:
-                for data_item in all_data:
-                    Job.objects.create(
-                        company_name=data_item['Title'],
-                        link=data_item['Link'],
-                        is_active=data_item['Status'] == "Active"
-                    )
+        if all_data:
+            for data_item in all_data:
+                Job.objects.create(
+                    company_name=data_item['Title'],
+                    link=data_item['Link'],
+                    is_active=data_item['Status'] == "Active"
+                )
 
-                send_telegram("New Updates On Tenders")
-                return True
-            return False
+            # Send a Telegram message using your send_telegram function
+            send_telegram("New Updates On Tenders")
+        else:
+            print("No data to save. Stopping the scraping process.")
 
     # Start from page 0
 

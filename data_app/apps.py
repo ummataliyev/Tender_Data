@@ -11,8 +11,8 @@ class DataAppConfig(AppConfig):
         try:
             # Create an interval schedule for the first task
             schedule1, created1 = IntervalSchedule.objects.get_or_create(
-                every=2,
-                period=IntervalSchedule.MINUTES,
+                every=8,
+                period=IntervalSchedule.HOURS,
             )
             # Create the first periodic task
             PeriodicTask.objects.get_or_create(

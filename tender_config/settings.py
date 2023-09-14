@@ -153,7 +153,7 @@ CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
 CELERYBEAT_SCHEDULE = {
     'task-1': {
         'task': 'data_app.tasks.adb_script',  # Task 1
-        'schedule': 2,  # Schedule the first task to run every 2 minutes
+        'schedule': 8,  # Schedule the first task to run every 2 minutes
     },
     # 'task-2': {
     #     'task': 'data_app.tasks.xt_script',  # Task 2 (replace with your actual task name)

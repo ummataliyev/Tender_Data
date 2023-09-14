@@ -21,17 +21,18 @@ class DataAppConfig(AppConfig):
                 task='data_app.tasks.adb_script',
             )
 
-            # Create an interval schedule for the second task
-            schedule2, created2 = IntervalSchedule.objects.get_or_create(
-                every=2,  # Change this to the desired interval in seconds
-                period=IntervalSchedule.MINUTES,
-            )
-            # Create the second periodic task
-            PeriodicTask.objects.get_or_create(
-                interval=schedule2,
-                name='Xt Site Scripts',
-                task='data_app.tasks.xt_script',
-            )
+            # # Create an interval schedule for the second task
+            # schedule2, created2 = IntervalSchedule.objects.get_or_create(
+            #     every=2,  # Change this to the desired interval in seconds
+            #     period=IntervalSchedule.MINUTES,
+            # )
+
+            # # Create the second periodic task
+            # PeriodicTask.objects.get_or_create(
+            #     interval=schedule2,
+            #     name='Xt Site Scripts',
+            #     task='data_app.tasks.xt_script',
+            # )
 
             # If you want to create a third task, repeat the process with a new schedule and task name.
 

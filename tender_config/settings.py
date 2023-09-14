@@ -15,7 +15,7 @@ SECRET_KEY = env.str('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.str('DEBUG')
-APP_ENV = env.str("APP_ENV", 'dev')
+APP_ENV = env.str("APP_ENV", 'prod')
 
 ALLOWED_HOSTS = ['*']
 

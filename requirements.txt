@@ -26,11 +26,11 @@ idna==3.4
 kombu==5.3.2
 marshmallow==3.20.1
 mccabe==0.7.0
-numpy==1.25.2
+numpy
 openpyxl==3.1.2
 outcome==1.2.0
 packaging==23.1
-pandas==2.1.0
+pandas
 pip-chill==1.0.3
 prompt-toolkit==3.0.39
 pycodestyle==2.11.0

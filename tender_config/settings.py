@@ -15,7 +15,6 @@ SECRET_KEY = env.str('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.str('DEBUG')
-APP_ENV = env.str("APP_ENV", 'prod')
 
 ALLOWED_HOSTS = ['*']
 
@@ -72,26 +71,16 @@ WSGI_APPLICATION = 'tender_config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-if APP_ENV == 'dev':
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
-        }
+DATABASES = {
+    'default': {
+        'ENGINE': env.str("POSTGRES_ENGINE"),
+        'NAME': env.str("POSTGRES_DB"),
+        'USER': env.str("POSTGRES_USER"),
+        'PASSWORD': env.str("POSTGRES_PASSWORD"),
+        'HOST': env.str("POSTGRES_HOST"),
+        'PORT': env.str("POSTGRES_PORT"),
     }
-
-
-if APP_ENV == 'prod':
-    DATABASES = {
-        'default': {
-            'ENGINE': env.str('POSTGRES_ENGINE'),
-            'NAME': env.str('POSTGRES_DB'),
-            'USER': env.str('POSTGRES_USER'),
-            'PASSWORD': env.str('POSTGRES_PASSWORD'),
-            'HOST': env.str('POSTGRES_HOST'),
-            'PORT': env.str('POSTGRES_PORT'),
-            }
-        }
+}
 
 
 # Password validation

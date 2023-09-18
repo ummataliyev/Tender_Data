@@ -6,7 +6,7 @@ After=network.target
 User=root
 Group=www-data
 WorkingDirectory=/root/Tender_Data
-ExecStart=/root/Tender_Data/venv/bin/celery -A tender_config worker -l INFO
+ExecStart=/root/Tender_Data/venv/bin/celery -A tender_config beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler
 
 [Install]
 WantedBy=multi-user.target

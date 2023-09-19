@@ -24,7 +24,7 @@ def adb_script():
     chrome_options = webdriver.ChromeOptions()
     chrome_options.binary_location = "/usr/bin/google-chrome"  # Use the correct path
     chrome_options.add_argument("--headless")  # Optional, for running in headless mode
-    driver = webdriver.Chrome(executable_path="/usr/bin/chromedriver", options=chrome_options)  # Path to ChromeDriver on your server
+    driver = webdriver.Chrome(executable_path="/usr/bin/chromedriver", options=chrome_options, service_args=["--verbose", "--log-path=/path/to/chromedriver.log"])
 
     # Define the base URL
     base_url = 'https://www.adb.org/projects/tenders/sector/information-and-communication-technology-1066/status/active-1576'

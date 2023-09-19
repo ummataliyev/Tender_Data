@@ -19,12 +19,12 @@ from data_app.utils import send_telegram
 @shared_task
 def adb_script():
     print("Task number one")
-    # Create a WebDriver instance (you might need to specify the path to your chromedriver executable)
 
+    # Create a WebDriver instance (you might need to specify the path to your chromedriver executable)
     chrome_options = webdriver.ChromeOptions()
-    chrome_options.binary_location = "/usr/bin/google-chrome"  # Path to Chrome executable on your server
+    chrome_options.binary_location = "/usr/bin/google-chrome"  # Use the correct path
     chrome_options.add_argument("--headless")  # Optional, for running in headless mode
-    driver = webdriver.Chrome(executable_path="/usr/bin/google-chrome", options=chrome_options)  # Path to ChromeDriver on your server
+    driver = webdriver.Chrome(executable_path="/usr/bin/chromedriver", options=chrome_options)  # Path to ChromeDriver on your server
 
     # Define the base URL
     base_url = 'https://www.adb.org/projects/tenders/sector/information-and-communication-technology-1066/status/active-1576'
